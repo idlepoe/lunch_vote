@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "475681557383",
+    "project_id": "lunch-votte",
+    "storage_bucket": "lunch-votte.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475681557383:android:e9114bdc76fac147172122",
+        "android_client_info": {
+          "package_name": "com.example.lunch_vote"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATrBEMBfp-XDBpvzFfot2Bg6fWNe1FPrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
