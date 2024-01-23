@@ -44,21 +44,32 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("lunch_vote")),
+      appBar: AppBar(title: Text("lunch_vote"), actions: [
+        IconButton(
+            onPressed: () {
+              getItems();
+            },
+            icon: Icon(Icons.refresh))
+      ]),
       body: ListView.builder(
         itemCount: _list.length,
         itemBuilder: (context, index) {
           return ListTile(
-            leading: Image.network(_list[index].pictureUrl),
-            title: Text(_list[index].name),
-            trailing: Wrap(
-              children: [
-                Text(_list[index].unlike.toString()),
-                IconButton(onPressed: () {}, icon: Icon(Icons.thumb_down)),
-                Text(_list[index].like.toString()),
-                IconButton(onPressed: () {}, icon: Icon(Icons.thumb_up))
-              ],
+            leading: Image.network(
+              _list[index].pictureUrl,
+              errorBuilder: (context, error, stackTrace) {
+                return Text("이미지\n없음");
+              },
             ),
+            title: Text(_list[index].name),
+            trailing: IconButton(
+                onPressed: () {
+                  deleteItem(_list[index]);
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.redAccent,
+                )),
           );
         },
       ),
@@ -108,11 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            getItems();
-          },
-          child: Icon(Icons.refresh)),
     );
   }
 
@@ -158,6 +164,25 @@ class _HomeScreenState extends State<HomeScreen> {
         ])
       });
     });
-    _textEditingController.text = "";
+    _textEditingController.clear();
+    _image = null;
+  }
+
+  Future<void> deleteItem(Item item) async {
+    try {
+      await _itemCol.doc(_today).update({
+        "list": FieldValue.arrayRemove([
+          {
+            "name": item.name,
+            "pictureUrl": item.pictureUrl,
+            "like": item.like,
+            "unlike": item.unlike,
+          }
+        ])
+      });
+    } catch (e) {
+      print(e);
+    }
+    await getItems();
   }
 }

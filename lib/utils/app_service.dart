@@ -6,11 +6,16 @@ class AppService {
   static Future<String> uploadFileToStorage(XFile? xFile) async {
     String today = DateFormat('yyyyMMddhhmmss').format(DateTime.now());
     String result = "";
-    Reference _reference = FirebaseStorage.instance
-        .ref()
-        .child('images/' + today + "_" + xFile!.name);
-    await _reference.putData(await xFile!.readAsBytes());
-    result = await _reference.getDownloadURL();
+    try {
+      Reference _reference = FirebaseStorage.instance
+          .ref()
+          .child('images/' + today + "_" + xFile!.name);
+      await _reference.putData(await xFile!.readAsBytes());
+      result = await _reference.getDownloadURL();
+    } catch (e) {
+      print(e);
+    } finally {}
+
     return result;
   }
 }
